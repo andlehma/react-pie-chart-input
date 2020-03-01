@@ -261,4 +261,14 @@ class PieChartInput extends React.Component {
   }
 }
 
+PieChartInput.propTypes = {
+  size: PropTypes.string,
+  percents: PropTypes.arrayOf(PropTypes.number),
+  initialAngle: PropTypes.number,
+  colors: PropTypes.arrayOf(PropTypes.string),
+  lineThickness: PropTypes.number,
+  handleRadius: PropTypes.number,
+  callback: PropTypes.func
+}
+
 export default PieChartInput;
