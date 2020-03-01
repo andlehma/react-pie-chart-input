@@ -1,27 +1,26 @@
 {
-  "name": "react-boilerplate",
-  "version": "1.0.0",
+  "name": "react-pie-chart-input",
+  "version": "0.0.6",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/react-pie-chart-input.js",
   "scripts": {
-    "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+  "author": "Andrew Lehman",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
   "devDependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
+    "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "css-loader": "^2.1.1",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.2"
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   }
 }

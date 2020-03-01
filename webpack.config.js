@@ -1,8 +1,12 @@
+var path = require('path');
+
 module.exports = {
-  entry: './app.js',
-  mode: 'development',
+  mode: 'production',
+  entry: './PieChartInput.js',
   output: {
-    filename: 'build.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'react-pie-chart-input.js',
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
@@ -13,13 +17,6 @@ module.exports = {
           loader: "babel-loader"
         }
       },
-      {
-        test: /\.css$/,
-        use: {
-          loader: "css-loader"
-        }
-      }
     ]
   },
-  watch: true
 }

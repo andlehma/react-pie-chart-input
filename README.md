@@ -2,3 +2,19 @@
 
 # react pie chart input
 react version of my [piechartinput](https://github.com/andlehma/piechartinput) html element
+
+# installation
+`npm install react-pie-chart-input`
+
+# usage
+```
+<PieChartInput
+    size={300}
+    percents={[.5, .3, .2]}
+    initialAngle={Math.PI}
+    colors={['red', 'blue', '#00FF00']}
+    lineThickness={5}
+    handleRadius={10}
+    callback={handleChange()}
+/>
+```

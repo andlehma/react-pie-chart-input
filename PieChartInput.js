@@ -25,7 +25,7 @@ class PieChartInput extends React.Component {
     if (!valid) console.error('pie chart input: percent array must sum to 1');
 
     this.state = {
-      percents: this.props.percents,
+      percents: this.props.percents || [.3, .4, .3],
       angles: [],
       mouseOver: [],
       grab: [],
@@ -243,7 +243,9 @@ class PieChartInput extends React.Component {
     let newAngles = this.state.angles.slice();
     let changed = JSON.stringify(oldAngles) !== JSON.stringify(newAngles);
     if (changed) {
-      this.props.callback(this.state.percents);
+      if (typeof(this.props.callback) === "function") {
+        this.props.callback(this.state.percents);
+      }
     }
 
     // draw outline circle
