@@ -28,3 +28,6 @@ then open `index.html` in a browser.
     callback={handleChange()}
 />
 ```
+
+# live demo
+[andrewlehman.me/react-pie-chart-input](http://andrewlehman.me/react-pie-chart-input)
