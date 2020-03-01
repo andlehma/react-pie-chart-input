@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 const tau = 2 * Math.PI;
 let canvas, ctx, center, radius, initialAngle,
   colors, lineThickness, handleRadius;
@@ -259,4 +261,4 @@ class PieChartInput extends React.Component {
   }
 }
 
-module.exports = PieChartInput;
+export default PieChartInput;
