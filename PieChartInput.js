@@ -145,8 +145,7 @@ class PieChartInput extends React.Component {
     // release all on mouseup
     if (!mouse.down) {
       this.setState({
-        grab: new Array(this.state.percents.length).fill(false),
-        globGrab: false
+        grab: new Array(this.state.percents.length).fill(false)
       });
     }
 
@@ -193,7 +192,7 @@ class PieChartInput extends React.Component {
       // check for mouse down if hover
       if (this.state.mouseOver[i]) {
         if (mouse.down) {
-          if (!this.state.globalGrab) {
+          if (!this.state.globGrab) {
             let newGrab = this.state.grab.slice();
             newGrab[i] = true;
             this.setState({
@@ -220,17 +219,15 @@ class PieChartInput extends React.Component {
         // fudge it by adding a tiny amount to any angle of exactly 0
         if (newAngles[i] === 0) newAngles[i] = tau + .0001;
 
-        let newPercents = this.getPercentsFromAngles(this.state.angles);
+        let newPercents = this.getPercentsFromAngles(newAngles);
         if (newPercents) {
           this.setState({
             angles: newAngles,
             percents: newPercents
-          })
+          });
         }
       }
     }
-
-
   }
 
   animate() {
@@ -260,7 +257,6 @@ class PieChartInput extends React.Component {
     ctx.fillStyle = 'black';
     ctx.fill();
   }
-
 }
 
 module.exports = PieChartInput;
