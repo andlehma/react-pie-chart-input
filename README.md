@@ -4,7 +4,17 @@
 react version of my [piechartinput](https://github.com/andlehma/piechartinput) html element
 
 # installation
+for use in a react application, install from npm with
+
 `npm install react-pie-chart-input`
+
+to run the demo, clone the repo and run
+
+`cd react-pie-chart-input/demo`
+
+then `npm install` and `npm run build`
+
+then open `index.html` in a browser.
 
 # usage
 ```
