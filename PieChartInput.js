@@ -252,7 +252,7 @@ class PieChartInput extends React.Component {
         if (newPercents) {
 
           // edge case handling for all angles being equal
-          if (newPercents[newPercents.length - 1] === 1) {
+          if (newPercents.some((x) => x === 1)) {
             newPercents = new Array(newPercents.length).fill(0);
             let index = indexOfMax(oldPercents);
             newPercents[index] = 1;
