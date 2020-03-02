@@ -18,6 +18,24 @@ function distance(x1, y1, x2, y2) {
   return d;
 };
 
+function indexOfMax(arr) {
+  if (arr.length === 0) {
+    return -1;
+  }
+
+  let max = arr[0];
+  let maxIndex = 0;
+
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > max) {
+      maxIndex = i;
+      max = arr[i];
+    }
+  }
+
+  return maxIndex;
+}
+
 class PieChartInput extends React.Component {
 
   constructor(props) {
@@ -162,6 +180,13 @@ class PieChartInput extends React.Component {
       ctx.moveTo(center, center);
       ctx.fillStyle = colors[i];
       ctx.fill();
+
+      // edge case handling for all angles being equal
+      if (this.state.percents[i] === 1) {
+        ctx.arc(center, center, radius, 0, tau);
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+      }
     }
 
     for (let i = 0; i < this.state.angles.length; i++) {
@@ -221,8 +246,18 @@ class PieChartInput extends React.Component {
         // fudge it by adding a tiny amount to any angle of exactly 0
         if (newAngles[i] === 0) newAngles[i] = tau + .0001;
 
+        let oldPercents = this.state.percents;
         let newPercents = this.getPercentsFromAngles(newAngles);
+
         if (newPercents) {
+
+          // edge case handling for all angles being equal
+          if (newPercents[newPercents.length - 1] === 1) {
+            newPercents = new Array(newPercents.length).fill(0);
+            let index = indexOfMax(oldPercents);
+            newPercents[index] = 1;
+          }
+
           this.setState({
             angles: newAngles,
             percents: newPercents
@@ -242,7 +277,7 @@ class PieChartInput extends React.Component {
     let newAngles = this.state.angles.slice();
     let changed = JSON.stringify(oldAngles) !== JSON.stringify(newAngles);
     if (changed) {
-      if (typeof(this.props.callback) === "function") {
+      if (typeof (this.props.callback) === "function") {
         this.props.callback(this.state.percents);
       }
     }
