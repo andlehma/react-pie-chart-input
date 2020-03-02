@@ -149,7 +149,7 @@ class PieChartInput extends React.Component {
     // calculate last percent by subtracting the total from 1
     // this ensures that the percents always sum to 1
     let sum = newPercents.reduce((a, b) => a + b, 0);
-    newPercents.push(1 - sum);
+    newPercents.unshift(1 - sum);
     newPercents = newPercents.map(x => Math.round(x * 100) / 100);
 
     // do not return if any percent is negative
