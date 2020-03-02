@@ -8,7 +8,8 @@ let canvas, ctx, center, radius, initialAngle,
 let mouse = {
   x: innerWidth / 2,
   y: innerHeight / 2,
-  down: false
+  down: false,
+  touch: false
 };
 
 function distance(x1, y1, x2, y2) {
@@ -46,9 +47,9 @@ class PieChartInput extends React.Component {
 
     this.state = {
       percents: this.props.percents || [.3, .4, .3],
-      angles: [],
-      mouseOver: [],
-      grab: [],
+      mouseOver: new Array(this.props.percents.length).fill(false),
+      grab: new Array(this.props.percents.length).fill(false),
+      angles: new Array(this.props.percents.length).fill(false),
       globGrab: false,
     };
 
@@ -76,6 +77,7 @@ class PieChartInput extends React.Component {
     radius = center - 10;
     initialAngle = this.props.initialAngle || 0;
     colors = this.props.colors || new Array(this.state.percents.length).fill('white');
+    colors.push(colors.shift());
     lineThickness = this.props.lineThickness || 2;
     handleRadius = this.props.handleRadius || .04 * radius;
 
@@ -101,16 +103,47 @@ class PieChartInput extends React.Component {
         let rect = canvas.getBoundingClientRect();
         mouse.x = event.clientX - rect.left;
         mouse.y = event.clientY - rect.top;
+        mouse.touch = false;
       });
 
     window.addEventListener('mousedown',
       function () {
         mouse.down = true;
+        mouse.touch = false;
       });
 
     window.addEventListener('mouseup',
       function () {
         mouse.down = false;
+        mouse.touch = false;
+      });
+
+    // touch event listeners
+    window.addEventListener('touchmove',
+      function (event) {
+        let touch = event.touches[0];
+        let rect = canvas.getBoundingClientRect();
+        mouse.x = touch.clientX - rect.left;
+        mouse.y = touch.clientY - rect.top;
+        mouse.touch = true;
+      });
+
+    window.addEventListener('touchstart',
+      function () {
+        mouse.down = true;
+        mouse.touch = true;
+      });
+
+    window.addEventListener('touchend',
+      function () {
+        mouse.down = false;
+        mouse.touch = true;
+      });
+
+    window.addEventListener('touchcancel',
+      function () {
+        mouse.down = false;
+        mouse.touch = true;
       });
 
     this.animate();
@@ -165,8 +198,14 @@ class PieChartInput extends React.Component {
     // release all on mouseup
     if (!mouse.down) {
       this.setState({
-        grab: new Array(this.state.percents.length).fill(false)
+        mouseOver: new Array(this.state.mouseOver.length).fill(false),
+        grab: new Array(this.state.grab.length).fill(false),
+        globGrab: false
       });
+
+      if (mouse.touch) {
+        mouse.x = mouse.y = 0;
+      }
     }
 
     // draw colors
@@ -184,7 +223,9 @@ class PieChartInput extends React.Component {
       // edge case handling for all angles being equal
       if (this.state.percents[i] === 1) {
         ctx.arc(center, center, radius, 0, tau);
+        colors.unshift(colors.pop());
         ctx.fillStyle = colors[i];
+        colors.push(colors.shift());
         ctx.fill();
       }
     }
@@ -204,21 +245,24 @@ class PieChartInput extends React.Component {
       ctx.fillStyle = 'black';
       ctx.fill();
 
-      // check for mouse over the handle
-      let d = distance(mouse.x, mouse.y, linePos.x, linePos.y);
-      if (d < handleRadius) {
-        let newMouseOver = this.state.mouseOver.slice();
-        newMouseOver[i] = true;
-        this.setState({ mouseOver: newMouseOver });
-      } else {
-        let newMouseOver = this.state.mouseOver.slice();
-        newMouseOver[i] = false;
-        this.setState({ mouseOver: newMouseOver });
-      }
+      // check for mouse down
+      if (mouse.down) {
+        // check for mouse over handle
+        let d = distance(mouse.x, mouse.y, linePos.x, linePos.y);
+        let handleSize = handleRadius;
+        if (mouse.touch) handleSize *= 4;
+        if (d < handleSize) {
+          let newMouseOver = this.state.mouseOver.slice();
+          newMouseOver[i] = true;
+          this.setState({ mouseOver: newMouseOver });
+        } else {
+          let newMouseOver = this.state.mouseOver.slice();
+          newMouseOver[i] = false;
+          this.setState({ mouseOver: newMouseOver });
+        }
 
-      // check for mouse down if hover
-      if (this.state.mouseOver[i]) {
-        if (mouse.down) {
+        // set appropriate grab boolean if mouse is down over a handle
+        if (this.state.mouseOver[i]) {
           if (!this.state.globGrab) {
             let newGrab = this.state.grab.slice();
             newGrab[i] = true;
@@ -227,13 +271,6 @@ class PieChartInput extends React.Component {
               globGrab: true
             });
           }
-        } else {
-          let newGrab = this.state.grab.slice();
-          newGrab[i] = false;
-          this.setState({
-            grab: newGrab,
-            globGrab: false
-          });
         }
       }
 

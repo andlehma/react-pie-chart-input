@@ -1,6 +1,6 @@
 {
   "name": "react-pie-chart-input",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/react-pie-chart-input.js",
   "scripts": {

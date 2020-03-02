@@ -16,6 +16,15 @@ then `npm install` and `npm run build`
 
 then open `index.html` in a browser.
 
+if you're planning on supporting mobile browsers, i recommend that you add
+```
+html,
+body {
+    overscroll-behavior-y: contain;
+}
+```
+this ensures that the user does not accidentally reload the page while manipulating the pie chart input.
+
 # usage
 ```
 <PieChartInput
